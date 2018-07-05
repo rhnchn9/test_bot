@@ -170,7 +170,7 @@ client.on("messageDelete", async message=>{
 		return;
 	}
 	
-	logs.send(embed);
+	logs.send(msgdelete);
 	
 });
 		 
