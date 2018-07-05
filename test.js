@@ -140,6 +140,8 @@ client.on("messageDelete", async message=>{
 	else
 		deletedby=message.author.username;
 	
+	let msgdelete;
+	
 	if(message.attachments.size > 0){
 		
 	msgdelete = new Discord.RichEmbed()
