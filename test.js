@@ -8,6 +8,16 @@ client.on("ready",()=>{
 console.log('Test bot is on');
 });
 
+client.on("guildMemberAdd",member=>{
+	const guild=member.guild;
+	
+	//if(member.user.bot)    return;
+	
+	var norole=member.guild.roles.find("name","No Role");
+	if(memrole)
+	    member.addRole(memrole);
+});
+
 /*client.on("message", async message=>{
 	
 	if(message.author.bot)    return;
@@ -115,12 +125,26 @@ client.on("messageDelete", async message=>{
 	else
 		deletedby=message.author.username;
 	
-	const embed = new Discord.RichEmbed()
+	if(message.attachments.size > 0){
+		
+	msgdelete = new Discord.RichEmbed()
+	.setTitle("Deleted Embed(Image/Video/File)")
+	.setAuthor(message.author.username,message.author.avatarURL)
+	.addField("Channel: ",message.channel)
+	.addField("Deleted by:",deletedby);
+	
+	}
+	
+	else{
+		
+    msgdelete = new Discord.RichEmbed()
 	.setTitle("Deleted Message")
 	.setAuthor(message.author.username,message.author.avatarURL)
 	.addField("Channel: ",message.channel)
-	.addField("Content: ",message.content)
+	.addField("Textual Content: "," "+message.content)
 	.addField("Deleted by:",deletedby);
+	
+	}
 	
 	let logs=guild.channels.find("name","logs");
 	
@@ -132,8 +156,5 @@ client.on("messageDelete", async message=>{
 	logs.send(embed);
 	
 });
-		
- 
-
-
-client.login(config.token)
+		 
+client.login(process.env.BOT_TOKEN)
