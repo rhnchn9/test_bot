@@ -11,11 +11,26 @@ console.log('Test bot is on');
 client.on("guildMemberAdd",member=>{
 	const guild=member.guild;
 	
-	//if(member.user.bot)    return;
+	if(member.user.bot)    return;
 	
 	var norole=member.guild.roles.find("name","No Role");
-	if(memrole)
-	    member.addRole(memrole);
+	if(norole)
+	    member.addRole(norole);
+});
+
+client.on("guildMemberRemove",member=>{
+	
+	let logs=member.guild.channels.find("name","logs");
+	
+	const memberleft=new Discord.RichEmbed()
+	.setAuthor(member.user.username+"#"+member.user.discriminator,member.user.avatarURL)
+	.setColor(0xf84802)
+	.setTitle("Member Left/Kicked")
+	.setDescription("This member has left or been kicked from the server");
+	
+	
+	logs.send(memberleft);
+	
 });
 
 /*client.on("message", async message=>{
@@ -129,7 +144,8 @@ client.on("messageDelete", async message=>{
 		
 	msgdelete = new Discord.RichEmbed()
 	.setTitle("Deleted Embed(Image/Video/File)")
-	.setAuthor(message.author.username,message.author.avatarURL)
+	.setColor(0xf84802)
+	.setAuthor(message.author.username+"#"+message.author.discriminator,message.author.avatarURL)
 	.addField("Channel: ",message.channel)
 	.addField("Deleted by:",deletedby);
 	
@@ -137,9 +153,10 @@ client.on("messageDelete", async message=>{
 	
 	else{
 		
-    msgdelete = new Discord.RichEmbed()
+        msgdelete = new Discord.RichEmbed()
 	.setTitle("Deleted Message")
-	.setAuthor(message.author.username,message.author.avatarURL)
+	.setColor(0xf84802)
+	.setAuthor(message.author.username+"#"+message.author.discriminator,message.author.avatarURL)
 	.addField("Channel: ",message.channel)
 	.addField("Textual Content: "," "+message.content)
 	.addField("Deleted by:",deletedby);
