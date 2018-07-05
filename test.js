@@ -1,24 +1,12 @@
 const Discord=require("discord.js");
-const slite=require("sqlite");
-slite.open("./tac.sqlite");
+/*const slite=require("sqlite");
+slite.open("./tac.sqlite");*/
 
 const client= new Discord.Client(); 
-const config=require("./tconfig.json");
-
-var flg = 1;
-var schedule = new Date("April 12, 2018 20:00:00");
 	
 client.on("ready",()=>{
 console.log('Test bot is on');
 });
-
-/*client.setInterval(function msg(){
-	var curdate = new Date();
-	if(schedule.valueOf() < curdate.valueOf() && flg ){
-				 flg = 0;
-		         client.channels.find("name","bot-playground").send("Event is now on");
-		}
-},3*1000);*/  
 
 /*client.on("message", async message=>{
 	
