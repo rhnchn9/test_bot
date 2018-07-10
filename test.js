@@ -105,6 +105,8 @@ untouch.img="https://cdn.discordapp.com/attachments/424117485189595136/432451878
 untouch.counter=0;
 untouch.estatus=0;*/
 
+var previous_count_logs=1;
+
 const client= new Discord.Client(); 
 	
 client.on("ready",()=>{
@@ -323,12 +325,18 @@ client.on("messageDelete", async message=>{
 	
 	let logentry= await message.guild.fetchAuditLogs({type:'MESSAGE_DELETE'}).then(audit=>audit.entries.first());
 	
-	if(logentry.executor.bot)   return;
+	let current_count_logs=parseInt(logentry.extra.count);
 
-	if(logentry.executor.id !== message.author.id && logentry.target.id === message.author.id && logentry.extra.count>=1)
+	if(logentry.executor.id === message.author.id && (logentry.extra.count>=1))
+		deletedby=logentry.executor.username;
+	else if(logentry.target.id === message.author.id && (current_count_logs === previous_count_logs+1))
+		deletedby=logentry.executor.username;
+	else if(logentry.target.id === message.author.id && (current_count_logs === 1) && (Math.abs(logentry.createdTimestamp - msgdeletetimestamp)) <=1000 )
 		deletedby=logentry.executor.username;
 	else
 		deletedby=message.author.username;
+	
+	previous_count_logs=current_count_logs;
 	
 	let msgdelete;
 	
