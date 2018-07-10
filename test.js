@@ -315,11 +315,9 @@ client.on("message", async message=>{
 
 client.on("messageDelete", async message=>{
 	
-	//if(message.author.bot)    return;
-	
 	let deletedby="";
 	
-	let guild=message.guild;
+	let msgdeletetimestamp= new Date().getTime();
 	
 	//if(!guild.me.hasPermission('VIEW_AUDIT_LOGS'))    return;
 	
@@ -363,7 +361,7 @@ client.on("messageDelete", async message=>{
 	
 	}
 	
-	let logs=guild.channels.find("name","logs");
+	let logs=message.guild.channels.find("name","logs");
 	
 	if(!logs){
 		console.log("channel not found");
