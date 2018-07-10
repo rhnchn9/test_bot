@@ -315,7 +315,7 @@ client.on("messageDelete", async message=>{
 	
 	//if(message.author.bot)    return;
 	
-	let deletedby;
+	let deletedby="";
 	
 	let guild=message.guild;
 	
@@ -325,7 +325,7 @@ client.on("messageDelete", async message=>{
 	
 	if(logentry.executor.bot)   return;
 
-	if(logentry.target.id === message.author.id && logentry.extra.count>=1)
+	if(logentry.extra.channel.id === message.channel.id && (logentry.target.id === message.author.id) && (logentry.extra.count>=1) && (logentry.createdTimestamp > (Date.now() - 5000)))
 		deletedby=logentry.executor.username;
 	else
 		deletedby=message.author.username;
