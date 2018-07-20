@@ -315,6 +315,8 @@ client.on("message", async message=>{
 
 client.on("messageDelete", async message=>{
 	
+	if(message.author.bot)    return;
+	
 	let deletedby="";
 	
 	let msgdeletetimestamp= new Date().getTime();
