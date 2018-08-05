@@ -50,13 +50,13 @@ client.on("messageDelete", async message=>{
 	let current_count_logs=parseInt(logentry.extra.count);
 
 	if(logentry.executor.id === message.author.id && (logentry.extra.count>=1))
-		deletedby=logentry.executor.username;
+		deletedby=logentry.executor;
 	else if(logentry.target.id === message.author.id && (current_count_logs === previous_count_logs+1))
-		deletedby=logentry.executor.username;
+		deletedby=logentry.executor;
 	else if(logentry.target.id === message.author.id && (current_count_logs === 1) && (Math.abs(logentry.createdTimestamp - msgdeletetimestamp)) <=1000 )
-		deletedby=logentry.executor.username;
+		deletedby=logentry.executor;
 	else
-		deletedby=message.author.username;
+		deletedby=message.author;
 	
 	previous_count_logs=current_count_logs;
 	
@@ -69,7 +69,8 @@ client.on("messageDelete", async message=>{
 	.setColor(0xf84802)
 	.setAuthor(message.author.username+"#"+message.author.discriminator,message.author.avatarURL)
 	.addField("Channel: ",message.channel)
-	.addField("Deleted by:",deletedby);
+	.setFooter(deletedby.username+"#"+deletedby.discriminator+" deleted it",deletedby.avatarURL)
+	.setTimestamp();
 	
 	}
 	
@@ -81,7 +82,8 @@ client.on("messageDelete", async message=>{
 	.setAuthor(message.author.username+"#"+message.author.discriminator,message.author.avatarURL)
 	.addField("Channel: ",message.channel)
 	.addField("Textual Content: "," "+message.content)
-	.addField("Deleted by:",deletedby);
+	.setFooter(deletedby.username+"#"+deletedby.discriminator+" deleted it",deletedby.avatarURL)
+	.setTimestamp();
 	
 	}
 	
