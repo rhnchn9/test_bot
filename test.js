@@ -15,7 +15,7 @@ client.on("guildMemberAdd",member=>{
 	
 	if(member.user.bot)    return;
 	
-	var norole=member.guild.roles.find("name","No Role");
+	var norole=member.guild.roles.find("name","Outcast");
 	if(norole)
 	    member.addRole(norole);
 });
@@ -116,7 +116,7 @@ client.on("guildMemberUpdate",(oldMember,newMember)=>{
 	
 	if(!newMember.guild.me.hasPermission("MANAGE_ROLES"))    return;
 	
-	let norole = newMember.guild.roles.find("name","No Role");
+	let norole = newMember.guild.roles.find("name","Outcast");
 	if(!norole)    return;
 	
 	if(oldMember.roles.has(norole.id) && newMember.roles.has(norole.id) && checkMemberRoles(newMember))
