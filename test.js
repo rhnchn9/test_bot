@@ -1,6 +1,4 @@
 const Discord=require("discord.js");
-/*const slite=require("sqlite");
-slite.open("./tac.sqlite");*/
 
 var previous_count_logs=1;
 
