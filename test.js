@@ -48,21 +48,23 @@ client.on("messageDelete", async message => {
 
     //if(!guild.me.hasPermission('VIEW_AUDIT_LOGS'))    return;
 
-    let logentry = await message.guild.fetchAuditLogs({ type: 'MESSAGE_DELETE' }).then(audit => audit.entries.first());
-    let current_count_logs = parseInt(logentry.extra.count);
-    let elapsedTime = Math.abs(logentry.createdTimestamp - new Date().getTime());
-    var deletedBy,
-        msgToSend;
+    var deletedBy,msgToSend;
+	
+	if(logentry){	
+        let current_count_logs = parseInt(logentry.extra.count);
+        let elapsedTime = Math.abs(logentry.createdTimestamp - new Date().getTime());
+	
+        if (logentry.executor.id === message.author.id && logentry.extra.count >= 1)
+            deletedBy = logentry.executor;
+        else if (logentry.target.id === message.author.id && current_count_logs === (previous_count_logs + 1))
+            deletedBy = logentry.executor;
+        else if (logentry.target.id === message.author.id && current_count_logs === 1 && elapsedTime <= 1000)
+            deletedBy = logentry.executor;
+        else deletedBy = message.author;
 
-    if (logentry.executor.id === message.author.id && logentry.extra.count >= 1)
-        deletedBy = logentry.executor;
-    else if (logentry.target.id === message.author.id && current_count_logs === (previous_count_logs + 1))
-        deletedBy = logentry.executor;
-    else if (logentry.target.id === message.author.id && current_count_logs === 1 && elapsedTime <= 1000)
-        deletedBy = logentry.executor;
-    else deletedBy = message.author;
-
-    previous_count_logs = current_count_logs;
+        previous_count_logs = current_count_logs;
+	}
+	else deletedBy = message.author;
 
     if (message.attachments.size > 0) {
         msgToSend = new Discord.RichEmbed()
