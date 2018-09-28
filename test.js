@@ -47,6 +47,8 @@ client.on("messageDelete", async message => {
     }
 
     //if(!guild.me.hasPermission('VIEW_AUDIT_LOGS'))    return;
+	
+    let logentry = await message.guild.fetchAuditLogs({ type: 'MESSAGE_DELETE' }).then(audit => audit.entries.first());	
 
     var deletedBy,msgToSend;
 	
