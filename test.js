@@ -128,7 +128,7 @@ client.on("messageDelete", async message => {
 });
 
 function checkMemberRoles(member) {
-    let rolesnames = ["Tunanians", "Salmonians", "Mackerel", "Seagulls", "Sea Cucumbah", "Sea Horse","Birb"];
+    let rolesnames = ["Tunanians", "Salmonians", "Mackerel", "Seagulls", "Sea Cucumbah", "Sea Horse", "Birb"];
     let newrole;
     let len = rolesnames.length;
 
