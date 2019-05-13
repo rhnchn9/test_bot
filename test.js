@@ -3,8 +3,8 @@ const request = require('request-promise-native');
 
 var previous_count_logs = 1;
 
-const MAX_IMAGE_WIDTH = 400.0;
-const MAX_IMAGE_HEIGHT = 300.0;
+// const MAX_IMAGE_WIDTH = 400.0;
+// const MAX_IMAGE_HEIGHT = 300.0;
 const client = new Discord.Client();
 
 client.on("ready", () => {
@@ -86,13 +86,13 @@ client.on("messageDelete", async message => {
                 width = image.width;
 
             // We don't need the full image, so reduce image size while keeping aspect ratio.
-            if (height >= width && height > MAX_IMAGE_HEIGHT) {
+            /*if (height >= width && height > MAX_IMAGE_HEIGHT) {
                 width = Math.round((MAX_IMAGE_HEIGHT / height) * width);
                 height = MAX_IMAGE_HEIGHT;
             } else if (width > height && width > MAX_IMAGE_WIDTH) {
                 height = Math.round((MAX_IMAGE_WIDTH / width) * height);
                 width = MAX_IMAGE_WIDTH;
-            }
+            }*/
 
             var imgReq = {
                 url: `${image.proxyURL}?width=${width}&height=${height}`,
