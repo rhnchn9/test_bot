@@ -1,5 +1,7 @@
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 const request = require('request-promise-native');
+const dotenv = require('dotenv');
+dotenv.config();
 
 var previous_count_logs = 1;
 
@@ -7,42 +9,41 @@ var previous_count_logs = 1;
 // const MAX_IMAGE_HEIGHT = 300.0;
 const client = new Discord.Client();
 
-client.on("ready", () => {
+client.on('ready', () => {
     console.log('Test bot is on');
 });
 
-client.on("guildMemberAdd", member => {
-    const guild = member.guild;
+client.on('guildMemberAdd', member => {
 
     if (member.user.bot) return;
 
-    var norole = member.guild.roles.find("name", "Outcast");
+    var norole = member.guild.roles.some(role => role.name === 'Outcast');
     if (norole)
         member.addRole(norole);
 });
 
-client.on("guildMemberRemove", member => {
-    let logs = member.guild.channels.find("name", "logs");
+client.on('guildMemberRemove', member => {
+    let logs = member.guild.channels.some(channel => channel.name === 'logs');
     if (!logs) {
-        console.log("'logs' channel not found");
+        console.log('\'logs\' channel not found');
         return;
     }
 
     const memberleft = new Discord.RichEmbed()
         .setAuthor(`${member.user.username}#${member.user.discriminator}`, member.user.avatarURL)
         .setColor(0xf84802)
-        .setTitle("Member Left/Kicked")
-        .setDescription("This member has left or been kicked from the server");
+        .setTitle('Member Left/Kicked')
+        .setDescription('This member has left or been kicked from the server');
 
     logs.send(memberleft);
 });
 
-client.on("messageDelete", async message => {
+client.on('messageDelete', async message => {
     if (message.author.bot) return;
 
-    let logs = message.guild.channels.find("name", "logs");
+    let logs = message.guild.channels.find(channel => channel.name === 'logs');
     if (!logs) {
-        console.log("'logs' channel not found");
+        console.log('\'logs\' channel not found');
         return;
     }
 
@@ -52,7 +53,7 @@ client.on("messageDelete", async message => {
 
     var deletedBy,msgToSend;
 	
-	if(logentry){	
+    if(logentry){	
         let current_count_logs = parseInt(logentry.extra.count);
         let elapsedTime = Math.abs(logentry.createdTimestamp - new Date().getTime());
 	
@@ -65,15 +66,15 @@ client.on("messageDelete", async message => {
         else deletedBy = message.author;
 
         previous_count_logs = current_count_logs;
-	}
-	else deletedBy = message.author;
+    }
+    else deletedBy = message.author;
 
     if (message.attachments.size > 0) {
         msgToSend = new Discord.RichEmbed()
-            .setTitle("Deleted Embed(Image/Video/File)")
+            .setTitle('Deleted Embed(Image/Video/File)')
             .setColor(0xf84802)
             .setAuthor(`${message.author.username}#${message.author.discriminator}`, message.author.avatarURL)
-            .addField("Channel: ", message.channel);
+            .addField('Channel: ', message.channel);
 
         if (message.content.trim() !== '')
             msgToSend.addField('Text Content: ', ` ${message.content}`);
@@ -101,25 +102,25 @@ client.on("messageDelete", async message => {
             };
 
             var imgData = await request.get(imgReq).catch(err => {
-                console.log(`Request for '${imgReq.url}' return a ${err.statusCode}.`)
+                console.log(`Request for '${imgReq.url}' return a ${err.statusCode}.`);
             });
 
             if (imgData) { // request for the image was successful
                 var attachment = new Discord.Attachment(imgData, filename);
                 msgToSend.attachFile(attachment)
-                         .setImage(`attachment://${filename}`);
+                    .setImage(`attachment://${filename}`);
             }
         }
 
         msgToSend.setFooter(`${deletedBy.username}#${deletedBy.discriminator} deleted it`, deletedBy.avatarURL)
-                 .setTimestamp();
+            .setTimestamp();
     } else {
         msgToSend = new Discord.RichEmbed()
-            .setTitle("Deleted Message")
+            .setTitle('Deleted Message')
             .setColor(0xf84802)
             .setAuthor(`${message.author.username}#${message.author.discriminator}`, message.author.avatarURL)
-            .addField("Channel: ", message.channel)
-            .addField("Textual Content: ", ` ${message.content}`)
+            .addField('Channel: ', message.channel)
+            .addField('Textual Content: ', ` ${message.content}`)
             .setFooter(`${deletedBy.username}#${deletedBy.discriminator} deleted it`, deletedBy.avatarURL)
             .setTimestamp();
     }
@@ -128,26 +129,23 @@ client.on("messageDelete", async message => {
 });
 
 function checkMemberRoles(member) {
-    let rolesnames = ["Tunanians", "Salmonians", "Mackerel", "Seagulls", "Sea Cucumbah", "Sea Horse", "Birb"];
+    let rolesnames = ['Tunanians', 'Salmonians', 'Mackerel', 'Seagulls', 'Sea Cucumbah', 'Sea Horse', 'Birb'];
     let newrole;
-    let len = rolesnames.length;
+    rolesnames.forEach(roleName => {
+        newrole = member.roles.some(role => role.name === roleName);
+    }); 
 
-    for (var i = 0; i < len; i++) {
-        newrole = member.roles.find("name", rolesnames[i]);
-        if (newrole) return true;
-    }
-
-    return false;
+    return newrole;
 }
 
-client.on("guildMemberUpdate", (oldMember, newMember) => {
-    if (!newMember.guild.me.hasPermission("MANAGE_ROLES")) return;
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+    if (!newMember.guild.me.hasPermission('MANAGE_ROLES')) return;
 
-    let norole = newMember.guild.roles.find("name", "Outcast");
+    let norole = newMember.guild.roles.find(role => role.name === 'Outcast');
     if (!norole) return;
 
     if (oldMember.roles.has(norole.id) && newMember.roles.has(norole.id) && checkMemberRoles(newMember))
         newMember.removeRole(norole);
 });
 
-client.login(process.env.BOT_TOKEN)
+client.login(process.env.BOT_TOKEN);

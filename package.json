@@ -4,10 +4,13 @@
   "description": "",
   "main": "test.js",
   "scripts": {
-    "start": "node test.js"
+    "dev": "node test.js",
+    "lint": "eslint test.js --fix"
   },
   "dependencies": {
     "discord.js": "^11.3.0",
+    "dotenv": "^8.0.0",
+    "eslint": "^5.16.0",
     "request": "2.88.0",
     "request-promise-native": "1.0.5"
   }
