@@ -133,9 +133,10 @@ function checkMemberRoles(member) {
     let newrole;
     rolesnames.forEach(roleName => {
         newrole = member.roles.some(role => role.name === roleName);
+        if (newrole) return newrole;
     }); 
 
-    return newrole;
+    return false;
 }
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
